@@ -11,6 +11,8 @@ const Home = () => {
             {user && (
                 <div>
                     <p>You are logged in as: {user.email}</p>
+                    <p>Your user ID is: {user.uid}</p>
+                    <p>Your name is: {user.name}</p>
                     <button onClick={signout}>Sign Out</button>
                 </div>
             )}
