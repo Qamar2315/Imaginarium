@@ -1,0 +1,35 @@
+.signup-container {
+    width: 300px;
+    margin: 0 auto; /* Center the container */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.signup-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+.signup-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px; /* Add rounded corners */
+    width: 100%;
+
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}

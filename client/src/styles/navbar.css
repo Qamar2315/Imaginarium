@@ -1,0 +1,42 @@
+.navbar {
+    background-color: #333; /* Example background color */
+    overflow: hidden; 
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.navbar li {
+    float: left; /* Make list items float horizontally */
+}
+
+
+.navbar li a, .signout-button {
+    display: block; /* Make links fill the list item */
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none; /* Remove underlines */
+}
+
+
+.navbar li a:hover, .signout-button:hover {
+    background-color: #111; /* Darker background on hover */
+
+}
+
+
+.signout-button { /* Style the Sign Out button like a link */
+  background: transparent; /* Make the button background transparent */
+  border: none; /* Remove button border */
+  color: white; /* Set text color to white */
+  font-family: inherit; /* Inherit font properties */
+  font-size: inherit; /* Inherit font size */
+  cursor: pointer; /* Show pointer cursor on hover */
+  padding: 14px 16px;
+  
+}
