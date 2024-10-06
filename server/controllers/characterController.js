@@ -54,10 +54,16 @@ exports.getCharacterById = async (req, res) => {
   try {
     const characterId = req.params.id;
     const userId = req.user.uid; // Ensure user owns the character
-
+    const user = await User.findOne({ uid: userId });
+    if (!user) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
     const character = await Character.findOne({
       _id: characterId,
-      user: userId,
+      user: user._id,
     });
 
     if (!character) {
@@ -101,10 +107,26 @@ exports.deleteCharacter = async (req, res) => {
   try {
     const characterId = req.params.id;
     const userId = req.user.uid; // Ensure only the owner can delete
+    const user = await User.findOne({ uid: userId});
+    if (!user) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+    const character = await Character.findOne({
+      _id: characterId
+    });
+    if (!character) {
+      return res.status(404).json({ message: "Character not found" });
+    }
+    if(character.user.toString() !== user._id.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
 
     const deletedCharacter = await Character.findOneAndDelete({
       _id: characterId,
-      user: userId,
+      user: user._id,
     });
 
     if (!deletedCharacter) {

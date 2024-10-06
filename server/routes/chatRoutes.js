@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController'); // Import your controller
-const authenticateToken = require('../middleware/authMiddleware'); // Authentication middleware
+const authenticateToken = require('../middlewares/authMiddleware'); // Authentication middleware
 
 
 // Protect chat routes with authentication middleware

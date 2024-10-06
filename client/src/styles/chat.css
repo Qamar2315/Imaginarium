@@ -25,7 +25,8 @@
 
 .chat-container {
   flex: 2;  /* The chat area takes up twice as much space */
-  display: flex;
+  display : flex;
+  height : 400px; /* Set a fixed height */
   flex-direction: column;
 
 }
@@ -145,4 +146,10 @@
     border-radius: 5px;
     border: 2px solid #8E24AA; /* Purple border */
 
+}
+
+.loading-spinner {
+  text-align: center;
+  font-style: italic;
+  color: gray;
 }

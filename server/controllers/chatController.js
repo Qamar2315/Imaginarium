@@ -1,58 +1,72 @@
-// server/controllers/chatController.js (updated saveMessage function)
 const Chat = require('../models/Chat');
 const Message = require('../models/Message');
-const { GoogleGenerativeAI } = require("@google/generative-ai"); // Import Gemini
+const User = require('../models/User')
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const Character = require('../models/Character');
+const apiKey = process.env.GEMINI_API_KEY; // Make sure this is set
+const genAI = new GoogleGenerativeAI({ apiKey }); // Correct initialization
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });  // Get the model instance
 
 exports.saveMessage = async (req, res) => {
     try {
-        const userId = req.user.uid; // From auth middleware
+        let userId = req.user.uid;
+        const user = await User.findOne({ uid: userId });
+        userId = user._id;
         const characterId = req.params.characterId;
-        const userMessageText = req.body.text; // The message sent by the user
+        const userMessageText = req.body.text;
 
-        // 1. Get the character description (you'll need to implement this based on how you store it)
-        const character = await Character.findById(characterId); // Assuming Character model
-        const characterDescription = character.description || ""; // Handle case where description might be missing
+        const character = await Character.findById(characterId);
+        const characterDescription = character.description || "";
 
+        const prompt = `You are a character with the following description:\n${characterDescription}\n\nUser: ${userMessageText}\nCharacter:`
 
-        // 2. Construct the Gemini prompt
-        const prompt = `You are a character with the following description:\n${characterDescription}\n\nUser: ${userMessageText}\nCharacter:`; // Include character description in prompt
+        // const geminiResponse = await model.generateContent([prompt]); // Generate the response
+        // const geminiResponse = "hi i am new"
 
+        // const aiMessageText = geminiResponse.response.text(); // Access the generated text
 
-        // 3. Call Gemini API
-        const apiKey = process.env.GEMINI_API_KEY;
-        const genAI = new GoogleGenerativeAI(apiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const aiMessageText = "hi i am new";
 
-
-        const geminiResponse = await model.generateContent({ prompt });
-
-
-        const aiMessageText = geminiResponse.response.text();
-
-        // 4. Create and save the messages
-        const newuserMessage = new Message({ sender: 'user', text: userMessageText});
+        const newuserMessage = new Message({ sender: 'user', text: userMessageText });
         await newuserMessage.save();
-        const newAiMessage = new Message({ sender: 'character', text: aiMessageText});
+        const newAiMessage = new Message({ sender: 'character', text: aiMessageText });
         await newAiMessage.save();
-
-
 
         let chat = await Chat.findOne({ user: userId, character: characterId });
         if (!chat) {
             chat = new Chat({ user: userId, character: characterId, messages: [] });
         }
 
-
-
-        chat.messages.push(newuserMessage._id); // Add user's message first
+        chat.messages.push(newuserMessage._id);
         chat.messages.push(newAiMessage._id);
         await chat.save();
 
-
-        res.status(201).json({ chat, message: newAiMessage});
+        res.status(201).json({ chat, message: newAiMessage });
 
     } catch (error) {
         console.error('Error saving message:', error);
-        res.status(500).json({ message: error.message }); // Appropriate error handling
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+exports.getChatHistory = async (req, res) => {
+    try {
+        const userId = req.user.uid;
+        const characterId = req.params.characterId;
+        const user = await User.findOne({ uid: userId});
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        const chat = await Chat.findOne({ user: user._id, character: characterId }).populate('messages'); // Populate the messages
+
+        if (!chat) {
+            return res.status(200).json({ messages: [] }); // Return empty array if no chat found
+        }
+
+        res.json(chat);
+    } catch (error) {
+        console.error('Error fetching chat history:', error);
+        res.status(500).json({ message: error.message });
     }
 };

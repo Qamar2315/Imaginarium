@@ -1,8 +1,8 @@
-// client/src/pages/Chat.js
-import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom'; // Import Link
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import '../styles/chat.css';
+import '../styles/chat.css'; // Ensure this contains the scrollable styles
+const baseURL = process.env.REACT_APP_API_URL;
 
 const Chat = () => {
     const { user } = useContext(AuthContext);
@@ -12,10 +12,12 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [loading, setLoading] = useState(true);
+    const [loadingAiReply, setLoadingAiReply] = useState(false); // Track loading state for AI reply
     const [error, setError] = useState('');
+    const messagesEndRef = useRef(null); // Ref for auto-scrolling
 
     useEffect(() => {
-        let isMounted = true; // Flag to track component mount status
+        let isMounted = true;
 
         const fetchCharacterAndChat = async () => {
             if (!user) {
@@ -24,7 +26,7 @@ const Chat = () => {
             }
 
             try {
-                const response = await fetch(`/api/characters/${characterId}`, {
+                const response = await fetch(`${baseURL}/api/characters/${characterId}`, {
                     headers: {
                         'Authorization': `Bearer ${await user.getIdToken()}`,
                     },
@@ -36,13 +38,9 @@ const Chat = () => {
                 }
 
                 const characterData = await response.json();
+                if (isMounted) setCharacter(characterData);
 
-                if (isMounted) { // Check if the component is still mounted
-                    setCharacter(characterData);
-                }
-
-                // Fetch chat history (replace with your actual API endpoint)
-                const chatResponse = await fetch(`/api/chat/${characterId}`, {
+                const chatResponse = await fetch(`${baseURL}/api/chat/${characterId}`, {
                     headers: {
                         'Authorization': `Bearer ${await user.getIdToken()}`,
                     },
@@ -54,69 +52,84 @@ const Chat = () => {
                 }
 
                 const chatData = await chatResponse.json();
-                // Set chat messages, handling potential undefined data
-                if (isMounted) {
-                    setMessages(chatData.messages || []);
-                }
+                if (isMounted) setMessages(chatData.messages || []);
 
             } catch (err) {
                 console.error("Error fetching data:", err);
-                if (isMounted) {  // Set state only if the component is still mounted
-                    setError(err.message || "Failed to load character or chat");
-                }
+                if (isMounted) setError(err.message || "Failed to load character or chat");
             } finally {
-                if (isMounted) {
-                    setLoading(false);
-                }
+                if (isMounted) setLoading(false);
             }
         };
 
         fetchCharacterAndChat();
 
         return () => {
-            isMounted = false; // Set flag to false when component unmounts
+            isMounted = false;
         };
 
-    }, [characterId, user]); // Add characterId as a dependency
+    }, [characterId, user]);
+
+    // Auto-scroll to the bottom of the chat when a new message is added
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [messages]);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
 
+        if (!newMessage.trim()) return; // Don't send empty messages
+
+        const userMessage = { sender: 'user', text: newMessage };
+        setNewMessage(''); // Clear input after creating userMessage
+
+        // Optimistically add the user's message to the messages state
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+        setLoadingAiReply(true); // Set loading for AI reply
+
         try {
-            const response = await fetch(`/api/chat/${characterId}`, {
+            const response = await fetch(`${baseURL}/api/chat/${characterId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${await user.getIdToken()}`, // Fix closing quote
+                    'Authorization': `Bearer ${await user.getIdToken()}`,
                 },
-                body: JSON.stringify({ text: newMessage, sender: 'user' }),
+                body: JSON.stringify({ text: userMessage.text, sender: 'user' }),
             });
 
             if (!response.ok) {
-                throw new Error("Failed to send message.");
+                // Rollback UI update if API call fails
+                setMessages((prevMessages) => prevMessages.filter(m => m !== userMessage));
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to send message.");
             }
 
             const responseData = await response.json();
-            // Update the chat messages with Gemini's response or handle as needed
-            setMessages([...messages, responseData.message]); // Add the AI's message
+            const aiMessage = responseData.message;
 
-            setNewMessage(''); // Clear input field
+            // Add AI message to state
+            setMessages((prevMessages) => [...prevMessages, aiMessage]);
         } catch (error) {
             console.error("Error sending message:", error);
-            setError("Failed to send message. Please try again."); // Display error to the user
+            setError(error.message || "Failed to send message. Please try again.");
+        } finally {
+            setLoadingAiReply(false); // Stop loading after AI reply is received
         }
     };
 
     const handleDeleteCharacter = async () => {
-        if (!window.confirm("Are you sure you want to delete this character?")) { // Confirmation dialog
+        if (!window.confirm("Are you sure you want to delete this character?")) {
             return;
         }
 
         try {
-            const response = await fetch(`/api/characters/${characterId}`, { // Your delete route
+            const response = await fetch(`${baseURL}/api/characters/${characterId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${await user.getIdToken()}`, // Fix closing quote
+                    'Authorization': `Bearer ${await user.getIdToken()}`,
                 },
             });
 
@@ -124,7 +137,7 @@ const Chat = () => {
                 throw new Error("Failed to delete character");
             }
 
-            navigate('/characters'); // Redirect after deletion
+            navigate('/characters');
         } catch (error) {
             console.error("Delete error:", error);
             setError("An error occurred while deleting.");
@@ -132,7 +145,7 @@ const Chat = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;  // Or a better loading indicator
+        return <div>Loading...</div>;
     }
 
     if (error) {
@@ -140,34 +153,36 @@ const Chat = () => {
     }
 
     if (!character) {
-        return <div>Character not found.</div>; // Or handle appropriately
+        return <div>Character not found.</div>;
     }
 
     return (
         <div className="chat-page">
             <div className="character-info">
                 <h1 className="character-name">{character.name}</h1>
-                {/* Display other character info */}
-                {character.imageUrl && <img src={character.imageUrl} alt={character.name} className="character-image" />} {/* Display image */}
+                {character.imageUrl && <img src={character.imageUrl} alt={character.name} className="character-image" />}
                 <p>{character.description}</p>
-                {/* Edit and Delete Buttons */}
                 <div className="edit-delete-buttons">
-                    <Link to={`/edit/${character._id}`} className="edit-button">Edit</Link> {/* Link to edit page */}
+                    <Link to={`/edit/${character._id}`} className="edit-button">Edit</Link>
                     <button onClick={handleDeleteCharacter} className="delete-button">Delete</button>
                 </div>
             </div>
 
-            <div className="chat-container">  {/* Add a dedicated chat container */}
-                <div className="messages-list"> {/* Messages list container */}
-                    {messages.map(message => (
-                        <div key={message._id} className={`message ${message.sender}`}> {/* Dynamic class based on sender */}
+            <div className="chat-container">
+                <div className="messages-list">
+                    {messages.map((message, index) => (
+                        <div key={message._id || index} className={`message ${message.sender}`}>
                             <span className="sender">{message.sender}:</span>
                             <span className="text">{message.text}</span>
                         </div>
                     ))}
+                    <div ref={messagesEndRef} /> {/* Auto scroll target */}
                 </div>
 
-                <form onSubmit={handleSendMessage} className="message-form">  {/* Add message form */}
+                {/* Show loading indicator while waiting for AI response */}
+                {loadingAiReply && <div className="loading-spinner">{character.name} is typing...</div>}
+
+                <form onSubmit={handleSendMessage} className="message-form">
                     <input
                         type="text"
                         value={newMessage}
