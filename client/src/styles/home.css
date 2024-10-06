@@ -1,0 +1,79 @@
+/* src/styles/home.css */
+.home-container {
+    background-image: url('../../public/background.jpg'); /* Path to your image */
+    background-size: cover; /* Cover the entire container */
+    background-position: center; /* Center the background */
+    min-height: 100vh; /* Ensure it takes up full viewport height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Vertically center content */
+    color: white;  /* Text color for contrast */
+    text-align: center; /* Center align the text within the hero section */
+    font-family: sans-serif; /* Choose a suitable font */
+}
+
+.hero-section {
+    background-color: rgba(106, 27, 154, 0.7); /* Deep purple with some transparency */
+    padding: 40px;
+    border-radius: 10px;
+}
+
+
+.welcome-title {
+    font-size: 3em; /* Large, prominent title */
+    margin-bottom: 20px;
+}
+
+.welcome-text {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.explore-button {
+    background-color: #F06292; /* Pink accent color for the button */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.explore-button:hover {
+    background-color: #EC407A;  /* Slightly darker pink on hover */
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    gap: 20px; /* Space between buttons */
+    margin-bottom: 20px; /* Add some margin below the buttons */
+}
+
+
+.signup-button { /* Style the signup button */
+    background-color: #42A5F5; /* Blue from your theme */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.signup-button:hover {
+    background-color: #1E88E5; /* Darker blue on hover */
+}
+
+.signup-prompt {  /* Style the "Not registered yet?" text */
+    font-size: 0.9em;  /* Slightly smaller font size */
+}
+
+.signup-link {  /* Style the "Sign Up here" link */
+    color: #F06292; /* Pink, matching the other button */
+    text-decoration: none; /* Remove underline from link */
+    font-weight: bold;
+}

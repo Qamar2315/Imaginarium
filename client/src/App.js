@@ -1,33 +1,36 @@
-// src/App.js (Example)
+// src/App.js
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
-import Home from './pages/Home'; // Requires authentication
+import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Navbar from './components/Navbar'; // Import the Navbar
-import CharacterList from './components/CharacterList'; // Example protected component
+import Navbar from './components/Navbar';
+import CharacterList from './components/CharacterList';
 
 
 function App() {
   return (
-    <AuthProvider>  {/* Wrap your app with AuthProvider */}
+    <AuthProvider>
       <BrowserRouter>
-          <Navbar/>
-          <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-
-              <Route path="/" element={ 
-                  <PrivateRoute>  {/* Protect Home route */}
-                    <Home/>
-                    <CharacterList/> {/* Nested protected route */}
-                  </PrivateRoute>
-              }/>
-          </Routes>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={<Home />} /> {/* Home is now open */}
+          <Route 
+            path="/characters"
+            element={
+              <PrivateRoute>
+                <CharacterList /> 
+              </PrivateRoute>
+            }
+          />
+        </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
 }
+
 export default App;

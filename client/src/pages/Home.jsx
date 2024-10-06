@@ -1,21 +1,27 @@
-import React, { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import React from 'react';
+import '../styles/home.css';
+import { Link } from 'react-router-dom';
 
 
 const Home = () => {
-    const { user, signout } = useContext(AuthContext);
-
     return (
-        <div>
-            <h1>Welcome Home!</h1>
-            {user && (
-                <div>
-                    <p>You are logged in as: {user.email}</p>
-                    <p>Your user ID is: {user.uid}</p>
-                    <p>Your name is: {user.name}</p>
-                    <button onClick={signout}>Sign Out</button>
+        <div className="home-container">
+            <div className="hero-section">
+                <h1 className="welcome-title">Welcome to Our World!</h1>
+                <p className="welcome-text">Explore exciting characters, stories, and more.</p>
+
+                <div className="button-group"> {/* Container for buttons */}
+                    <Link to="/characters"> {/* Link to Characters page */}
+                        <button className="explore-button">Explore Now</button>
+                    </Link>
+                    <Link to="/signup"> {/* Link to Sign Up page */}
+                        <button className="signup-button">Sign Up Now</button>
+                    </Link>
                 </div>
-            )}
+                <p className="signup-prompt">Not registered yet? <Link to="/signup" className="signup-link">Sign Up here</Link></p>
+
+
+            </div>
         </div>
     );
 };

@@ -1,0 +1,55 @@
+.login-container {
+    width: 300px;
+    margin: 50px auto; /* Center on page */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+
+}
+
+
+.login-form input {
+    width: calc(100% - 22px);  /* Account for padding and border */
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    border: 1px solid #ccc;
+    border-radius: 3px; /* Rounded input fields */
+}
+
+
+.login-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 3px; /* Rounded button */
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px; /* Larger font size */
+}
+
+.login-button:hover {  /* Hover effect */
+  background-color: #45a049; /* Darker green on hover */
+}
+
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    text-align: center; /* Center error messages */
+}
+
+
+.signup-link { /* Style the "Sign Up" link */
+  text-align: center;
+  margin-top: 15px;
+
+}
+
+
+.signup-link a {
+  color: #007bff;  /* Example link color - make it match your theme */
+  text-decoration: none;
+}
