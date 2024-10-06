@@ -1,0 +1,148 @@
+/* Chat.css */
+
+.chat-page {
+    display: flex;       /* Use Flexbox for layout */
+    padding: 20px;
+    font-family: sans-serif;
+}
+
+.character-info {
+    border-right: 1px solid #ccc;   /* Separator line */
+    padding-right: 20px;           /* Add some padding to the right */
+    margin-right: 20px;            /* Add some margin to the right */
+    flex: 1;                      /* Take up 1 part of the available space */
+
+}
+
+
+
+.character-name {
+  color: #6A1B9A;  /* Purple */
+  margin-bottom: 10px;
+}
+
+
+
+.chat-container {
+  flex: 2;  /* The chat area takes up twice as much space */
+  display: flex;
+  flex-direction: column;
+
+}
+
+
+.messages-list { /* Style the messages list */
+  overflow-y: auto; /* Add vertical scroll if needed */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  flex-grow: 1;  /* Allow messages area to expand to fill available space */
+
+
+}
+
+.message {  /* Style for each individual message */
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+
+
+}
+
+.message.user { /* Style messages from the user */
+    background-color: #e1bee7; /* Very light purple */
+    align-self: flex-end; /* Align to the right */
+    border: 1px solid #ce93d8; /* Slightly darker border */
+}
+
+.message.character { /* Style messages from the character */
+    background-color: #bbdefb; /* Light blue */
+    align-self: flex-start; /* Align to the left */
+    border: 1px solid #90caf9;
+
+
+}
+
+
+.message .sender { /* Style the sender's name */
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+
+
+.message-form { /* Style the message input form */
+  display: flex;
+  margin-top: 10px;  /* Add some space above the input */
+  border-top: 1px solid #ccc; /* Separator */
+  padding-top: 10px;
+
+}
+
+
+.message-input { /* Style for the input field */
+  flex-grow: 1; /* Takes up available space */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px 0 0 3px;
+  box-sizing: border-box; /* Include padding in width calculation */
+
+}
+
+.send-button { /* Style the send button */
+
+  background-color: #43A047; /* Green */
+  color: white;
+  border: none;
+  padding: 10px 15px;  /* Consistent padding */
+  border-radius: 0 3px 3px 0; /* Round the right corners */
+  cursor: pointer;
+
+}
+
+
+
+
+.edit-delete-buttons { /* Style for the Edit and Delete buttons */
+    margin-top: 20px;
+    display: flex; /* Use Flexbox for arrangement */
+    gap: 10px; /* Add space between buttons */
+
+}
+
+
+.edit-button, .delete-button {
+  padding: 8px 12px;
+  border-radius: 3px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+
+}
+
+.edit-button {
+  background-color: #42A5F5; /* Blue */
+  color: white;
+
+}
+
+
+
+.delete-button {
+  background-color: #EC407A; /* Pink */
+  color: white;
+
+}
+
+
+
+.character-image { /* Style the character image */
+    max-width: 200px;   /* Set max width */
+    height: auto;  /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto 15px auto; /* Center horizontally */
+
+    border-radius: 5px;
+    border: 2px solid #8E24AA; /* Purple border */
+
+}

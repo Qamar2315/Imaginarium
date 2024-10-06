@@ -1,14 +1,15 @@
 // src/App.js
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import PrivateRoute from './components/PrivateRoute';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
 
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Navbar from './components/Navbar';
-import CharacterList from './components/CharacterList';
-
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Navbar from "./components/Navbar";
+import Characters from "./pages/Characters";
+import CreateCharacter from "./pages/CreateCharacter";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -19,11 +20,27 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} /> {/* Home is now open */}
-          <Route 
+          <Route
+            path="/create-character"
+            element={
+              <PrivateRoute>
+                <CreateCharacter />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/characters"
             element={
               <PrivateRoute>
-                <CharacterList /> 
+                <Characters />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/chat/:characterId" // Route with dynamic parameter for character ID
+            element={
+              <PrivateRoute>
+                <Chat />
               </PrivateRoute>
             }
           />

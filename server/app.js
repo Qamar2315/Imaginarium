@@ -1,8 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db'); // Import database connection function
 const cors = require('cors');
-// const characterRoutes = require('./routes/characterRoutes');
-// const authenticateToken = require('./middlewares/authMiddleware'); // Import auth middleware
+const characterRoutes = require('./routes/characterRoutes');
+const authenticateToken = require('./middlewares/authMiddleware'); // Import auth middleware
 
 const userRoutes = require('./routes/userRoutes');
 
@@ -17,7 +17,7 @@ app.use(express.json());
 connectDB();  // Call the database connection function
 
 // Routes (Protected route)
-// app.use('/api/characters', authenticateToken, characterRoutes);
+app.use('/api/characters', authenticateToken, characterRoutes);
 app.use('/api/users', userRoutes);
 
 // Start the server

@@ -1,0 +1,86 @@
+.characters-page {
+    padding: 20px;
+    font-family: sans-serif; /* Or your preferred font */
+}
+
+
+.page-title {
+    color: #6A1B9A; /* Purple */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+.character-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 20px;
+
+
+}
+
+
+.character-card {
+    border: 2px solid #42A5F5; /* Blue border */
+    border-radius: 5px;
+    padding: 15px;
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit text color */
+    transition: transform 0.2s ease; /* Smooth hover effect */
+    display: flex; /* Flexbox for image and text alignment */
+    flex-direction: column; /* Align items vertically */
+    align-items: center; /* Center items horizontally */
+}
+
+
+.character-card:hover {
+    transform: translateY(-5px); /* Lift up on hover */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow */
+    border-color:#1E88E5;
+}
+
+
+.character-name {
+  margin-top: 10px;  /* Space between image and name */
+  color: #6A1B9A; /* Purple title */
+
+}
+
+
+.character-image {
+    max-width: 150px; /* Adjust image size as needed */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 50%; /* Make image circular (optional) */
+    margin-bottom: 10px; /* Space below image */
+
+}
+
+
+.create-character-button {
+    display: inline-block;
+    background-color: #43A047; /* Green button */
+    color: white;
+    padding: 12px 20px;
+    margin-top: 30px; /* Space above button */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    text-align: center; /* Center the text within the button */
+
+}
+
+.create-character-button:hover {
+  background-color: #66BB6A; /* Lighter green on hover */
+}
+
+
+
+.loading-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6A1B9A; /* Purple loading message */
+
+
+}
