@@ -2,7 +2,7 @@
 
 Imaginarium is a web application that allows users to create and interact with unique AI-powered characters.  Craft intricate character profiles, define their personalities, and engage in dynamic conversations. Unleash your creativity and build a world of your own!
 
-[![Imaginarium Screenshot](screenshots/1.png)](https://your-deployed-app-url.com)
+[![Imaginarium Screenshot](screenshots/1.png)]
 
 ## Features
 
