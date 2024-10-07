@@ -18,13 +18,13 @@ exports.saveMessage = async (req, res) => {
         const character = await Character.findById(characterId);
         const characterDescription = character.description || "";
 
-        const prompt = `You are a character with the following description:\n${characterDescription}\n\nUser: ${userMessageText}\nCharacter:`
+        // const prompt = `You are a character with the following description:\n${characterDescription}\n\nUser: ${userMessageText}\nCharacter:`
 
-        const geminiResponse = await model.generateContent(prompt); // Generate the response
+        // const geminiResponse = await model.generateContent(prompt); // Generate the response
 
-        const aiMessageText = geminiResponse.response.text(); // Access the generated text
+        // const aiMessageText = geminiResponse.response.text(); // Access the generated text
 
-        // const aiMessageText = "hi i am new";
+        const aiMessageText = "Sorry currently the AI is disabled for this project";
 
         const newuserMessage = new Message({ sender: 'user', text: userMessageText });
         await newuserMessage.save();
