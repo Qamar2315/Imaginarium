@@ -134,3 +134,7 @@ dist
 serviceAccountKey.json
 
 theme.txt
+
+extract_code.py
+
+output.txt
