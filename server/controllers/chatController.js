@@ -5,7 +5,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const Character = require('../models/Character');
 const apiKey = process.env.GEMINI_API_KEY; // Make sure this is set
 const genAI = new GoogleGenerativeAI({ apiKey }); // Correct initialization
-const model = genAI.getGenerativeModel({ model: "gemini-pro" });  // Get the model instance
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });  // Get the model instance
 
 exports.saveMessage = async (req, res) => {
     try {
@@ -20,12 +20,11 @@ exports.saveMessage = async (req, res) => {
 
         const prompt = `You are a character with the following description:\n${characterDescription}\n\nUser: ${userMessageText}\nCharacter:`
 
-        // const geminiResponse = await model.generateContent([prompt]); // Generate the response
-        // const geminiResponse = "hi i am new"
+        const geminiResponse = await model.generateContent(prompt); // Generate the response
 
-        // const aiMessageText = geminiResponse.response.text(); // Access the generated text
+        const aiMessageText = geminiResponse.response.text(); // Access the generated text
 
-        const aiMessageText = "hi i am new";
+        // const aiMessageText = "hi i am new";
 
         const newuserMessage = new Message({ sender: 'user', text: userMessageText });
         await newuserMessage.save();

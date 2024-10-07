@@ -84,16 +84,23 @@ exports.updateCharacter = async (req, res) => {
     const userId = req.user.uid; // Get user ID
     const updates = req.body; // The fields to update
 
+    const user = await User.findOne({ uid: userId});
+    if (!user) {
+      return res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
     const updatedCharacter = await Character.findOneAndUpdate(
-      { _id: characterId, user: userId }, // Find by ID and user
+      { _id: characterId, user: user._id }, // Find by ID and user
       updates,
       { new: true } // Return the updated document
     );
-
+    
     if (!updatedCharacter) {
       return res
         .status(404)
-        .json({ message: "Character not found or unauthorized" });
+        .json({ message: "Character not found" });
     }
     res.json(updatedCharacter);
   } catch (error) {

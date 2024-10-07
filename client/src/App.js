@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Characters from "./pages/Characters";
 import CreateCharacter from "./pages/CreateCharacter";
 import Chat from "./pages/Chat";
+import EditCharacter from "./pages/EditCharacter";
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Chat />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit/:characterId" // Route with dynamic parameter for character ID
+            element={
+              <PrivateRoute>
+                <EditCharacter />
               </PrivateRoute>
             }
           />
