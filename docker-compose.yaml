@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  client:
+    image: qamar2315/imaginarium-client:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - server # Ensure client starts after server
+  server:
+    image: qamar2315/imaginarium-server:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URL=${MONGODB_URL} # From Docker secrets
+      - GEMINI_API_KEY=${GEMINI_API_KEY} # From Docker secrets
